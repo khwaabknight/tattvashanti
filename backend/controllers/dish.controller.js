@@ -21,7 +21,7 @@ const createDish = async (req, res) => {
 
 const getAllDishes = async (req, res) => {
     try {
-        const dishes = await Dish.find();
+        const dishes = await Dish.find().populate("cuisine");
         return res.status(200).json({
             success: true,
             data: dishes,

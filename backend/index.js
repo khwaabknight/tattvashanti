@@ -5,6 +5,8 @@ import dbConnect from './config/database.js';
 import counsellorRouter from './routes/counsellor.route.js';
 import cuisineRouter from './routes/cuisine.route.js';
 import dishRouter from './routes/dish.route.js';
+import dietChartRouter from './routes/dietChart.route.js';
+import userRouter from './routes/user.route.js';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -36,6 +38,8 @@ app.get('/api/v1/healthcheck', (_, res) => {
 app.use('/api/v1/counsellor', counsellorRouter);
 app.use('/api/v1/cuisine', cuisineRouter);
 app.use('/api/v1/dish', dishRouter);
+app.use('/api/v1/dietChart', dietChartRouter);
+app.use('/api/v1/user', userRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

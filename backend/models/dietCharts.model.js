@@ -6,10 +6,6 @@ const dietChartSchema = new mongoose.Schema({
         ref: 'User',
         required: true,
     },
-    dietPlan: {
-        type: String,
-        required: true,
-    },
     maxAllowedCalories: {
         type: Number,
         required: true,

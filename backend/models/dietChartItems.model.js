@@ -14,15 +14,10 @@ const dietChartItemSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
-    timeOfDay: {
-        type: String,
-        enum: ['Breakfast', 'Lunch', 'Dinner', 'Snack'],
-        required: true,
-    },
     servingSize: {
         type: Number,
         required: true,
-    },
+    }, // in grams
 });
 
-export const DietChartItem = mongoose.model('DietChartItem', dietChartItemSchema); 
+export const DietChartItem = mongoose.model('DietChartItem', dietChartItemSchema);

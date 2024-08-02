@@ -14,6 +14,7 @@ const userSchema = new Schema({
         },
         age: {
             type: Number,
+            required: true,
         },
         weight: {
             type: Number,
@@ -29,13 +30,13 @@ const userSchema = new Schema({
         },
         gender: {
             type: String,
+            enum:["MALE","FEMALE"],
             required: true,
         },
         mobile: {
             type: String,
-            required: true,
         },
-        modicalCondition: {
+        medicalCondition: {
             type: String,
         },
     },
