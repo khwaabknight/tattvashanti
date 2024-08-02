@@ -23,27 +23,8 @@ const dietChartSchema = new mongoose.Schema({
         required: true,
     },
     items: [{
-        dish: {
-            type: mongoose.Schema.Types.ObjectId,
-            required: true,
-        },
-        calories: {
-            type: Number,
-            required: true,
-        },
-        dayDate: {
-            type: Date,
-            required: true,
-        },
-        timeOfDay: {
-            type: String,
-            enum: ['Breakfast', 'Lunch', 'Dinner', 'Snack'],
-            required: true,
-        },
-        servingSize: {
-            type: Number,
-            required: true,
-        },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'DietChartItem',
     }],
 }, { timestamps: true });
 

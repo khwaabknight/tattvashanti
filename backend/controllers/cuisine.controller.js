@@ -1,4 +1,4 @@
-import { Cuisine } from "../models/cuisine.model";
+import { Cuisine } from "../models/cuisine.model.js";
 
 const createCuisine = async (req, res) => {
     const { name, description, tags } = req.body;
@@ -18,27 +18,47 @@ const createCuisine = async (req, res) => {
     }
 }
 
-const editCuisine = async (req, res) => {
-    const { name, description, tags } = req.body;
+// const editCuisine = async (req, res) => {
+//     const {id} = req.params;
+//     const { name, description, tags } = req.body;
+//     try {
+//         const cuisine = await Cuisine.findById(id);
+//         if (!cuisine) return res.status(404).send("Cuisine not found");
+//         if (name) cuisine.name = name;
+//         if (description) cuisine.description = description;
+//         if (tags) {
+//             for (let i = 0; i < tags.length; i++) {
+//                 if (!cuisine.tags.includes(tags[i])) {
+//                     cuisine.tags.push(tags[i]);
+//                 }
+//             }
+//         }
+//         await cuisine.save();
+//         return res.status(200).json({
+//             success: true,
+//             data: cuisine,
+//             message: "Cuisine updated successfully",
+//         });
+//     }catch (error) {
+//         return res.status(404).json({ 
+//             message: "Error while updating cuisine", 
+//             error: error 
+//         });
+//     }
+// }
+
+const deleteCuisine = async (req,res) => {
+    const {id} = req.params;
     try {
-        const cuisine = await Cuisine.findByIdAndUpdate(req.params.id, req.body);
+        const cuisine = await Cuisine.findByIdAndDelete(id);
         if (!cuisine) return res.status(404).send("Cuisine not found");
-        if (name) cuisine.name = name;
-        if (description) cuisine.description = description;
-        if (tags) {
-            for (let i = 0; i < tags.length; i++) {
-                if (!cuisine.tags.includes(tags[i])) {
-                    cuisine.tags.push(tags[i]);
-                }
-            }
-        }
-        await cuisine.save();
         return res.status(200).json({
             success: true,
             data: cuisine,
-            message: "Cuisine updated successfully",
-        });
-    }catch (error) {
+            message: "Cuisine deleted successfully",
+        });        
+    } catch (error) {
+        console.log("Error in delete cuisine controller",error);
         return res.status(404).json({ 
             message: "Error while updating cuisine", 
             error: error 
@@ -63,4 +83,4 @@ const getAllCuisines = async (req, res) => {
     }
 }
 
-export { createCuisine, editCuisine, getAllCuisines };
+export { createCuisine, deleteCuisine, getAllCuisines };

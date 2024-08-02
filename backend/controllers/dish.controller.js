@@ -1,4 +1,4 @@
-import { Dish } from "../models/dish.model";
+import { Dish } from "../models/dish.model.js";
 
 const createDish = async (req, res) => {
     const { name, cuisine, tags, caloriesPer100gram, ingredients } = req.body;
@@ -37,8 +37,9 @@ const getAllDishes = async (req, res) => {
 }
 
 const deleteDish = async (req, res) => {
+    const { id } = req.params;
     try {
-        const dish = await Dish.findByIdAndRemove(req.params.id);
+        const dish = await Dish.findByIdAndDelete(id);
         if (!dish) return res.status(404).send("Dish not found");
         return res.status(200).json({
             success: true,
@@ -48,7 +49,7 @@ const deleteDish = async (req, res) => {
     }
     catch (error) {
         console.log("Error in delete dish controller",error);
-        return res.status(404).json({ 
+        return res.status(404).json({
             message: "Error while deleting dish", 
             error: error 
         });
