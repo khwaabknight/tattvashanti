@@ -6,7 +6,7 @@ import api from '../utils/axiosConfig';
 function ServerHealth() {
     const [health, setHealth] = React.useState(null);
     useEffect(() => {
-        api.get(`/api/healthcheck`).then((response) => {
+        api.get(`/api/v1/healthcheck`).then((response) => {
             console.log(response)
             setHealth(response?.data)
         }).catch((error) => {

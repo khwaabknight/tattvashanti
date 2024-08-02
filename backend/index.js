@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dbConnect from './config/database.js';
+import counsellorRouter from './routes/counsellor.route.js';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -23,12 +24,14 @@ app.get('/', (_, res) => {
   res.send('Hello World!')
 })
 
-app.get('/api/healthcheck', (_, res) => {
+app.get('/api/v1/healthcheck', (_, res) => {
   return res.status(200).json({
     success: true,
     message: "Server is running ❤️"
   })
 })
+
+app.use('/api/v1/counsellor', counsellorRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
