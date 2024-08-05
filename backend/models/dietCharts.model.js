@@ -6,10 +6,6 @@ const dietChartSchema = new mongoose.Schema({
         ref: 'User',
         required: true,
     },
-    maxAllowedCalories: {
-        type: Number,
-        required: true,
-    },
     startDate: {
         type: Date,
         required: true,
@@ -19,8 +15,7 @@ const dietChartSchema = new mongoose.Schema({
         required: true,
     },
     items: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'DietChartItem',
+        type: mongoose.Schema.Types.Mixed,
     }],
 }, { timestamps: true });
 
