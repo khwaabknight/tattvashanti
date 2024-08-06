@@ -1,123 +1,87 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Container,
   Typography,
-  List,
-  ListItem,
-  ListItemText,
-  Paper,
   Grid,
+  Paper,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
+  Box,
+  useTheme,
 } from '@mui/material'
-import DietChart from './DietChart'
+import { useNavigate } from 'react-router-dom'
+import RestaurantIcon from '@mui/icons-material/Restaurant'
+import MenuBookIcon from '@mui/icons-material/MenuBook'
+import PeopleIcon from '@mui/icons-material/People'
 
 const Dashboard = () => {
-  const [selectedUser, setSelectedUser] = useState(null)
-  const [openDietChart, setOpenDietChart] = useState(false)
+  const navigate = useNavigate()
+  const theme = useTheme()
 
-  // Mock user data - replace this with actual data from your backend
-  const users = [
-    { id: 1, name: 'John Doe', age: 30, weight: 70, height: 175 },
-    { id: 2, name: 'Jane Smith', age: 28, weight: 65, height: 165 },
-    // Add more users as needed
+  const menuItems = [
+    {
+      title: 'Cuisine',
+      icon: <RestaurantIcon fontSize='large' />,
+      path: '/counsellor/cuisine',
+    },
+    {
+      title: 'Dishes',
+      icon: <MenuBookIcon fontSize='large' />,
+      path: '/counsellor/dishes',
+    },
+    {
+      title: 'Users',
+      icon: <PeopleIcon fontSize='large' />,
+      path: '/counsellor/users',
+    },
   ]
-
-  // Mock diet data - replace this with actual data or form inputs
-  const dietData = [
-    ['Oatmeal', 'Eggs', 'Smoothie', 'Pancakes', 'Yogurt', 'Toast', 'Cereal'],
-    ['Salad', 'Sandwich', 'Soup', 'Stir fry', 'Wrap', 'Pasta', 'Burger'],
-    ['Chicken', 'Fish', 'Beef', 'Tofu', 'Pork', 'Lamb', 'Vegetarian'],
-    [
-      'Fruit',
-      'Nuts',
-      'Protein bar',
-      'Vegetables',
-      'Cheese',
-      'Hummus',
-      'Popcorn',
-    ],
-  ]
-
-  const handleUserClick = (user) => {
-    setSelectedUser(user)
-  }
-
-  const handleOpenDietChart = () => {
-    setOpenDietChart(true)
-  }
-
-  const handleCloseDietChart = () => {
-    setOpenDietChart(false)
-  }
 
   return (
-    <Container>
-      <Typography variant='h4' gutterBottom>
-        Counsellor Dashboard
-      </Typography>
+    <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 4,
+        }}
+      >
+        <Typography variant='h4' component='h1' gutterBottom>
+          Counsellor Dashboard
+        </Typography>
+      </Box>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <Paper>
-            <List>
-              {users.map((user) => (
-                <ListItem
-                  button
-                  key={user.id}
-                  onClick={() => handleUserClick(user)}
-                  selected={selectedUser && selectedUser.id === user.id}
-                >
-                  <ListItemText primary={user.name} />
-                </ListItem>
-              ))}
-            </List>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={8}>
-          {selectedUser && (
-            <Paper style={{ padding: 16 }}>
-              <Typography variant='h6'>{selectedUser.name}</Typography>
-              <Typography>Age: {selectedUser.age}</Typography>
-              <Typography>Weight: {selectedUser.weight} kg</Typography>
-              <Typography>Height: {selectedUser.height} cm</Typography>
+        {menuItems.map((item) => (
+          <Grid item xs={12} sm={6} md={4} key={item.title}>
+            <Paper
+              sx={{
+                p: 3,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                height: '100%',
+                transition: 'all 0.3s',
+                '&:hover': {
+                  transform: 'translateY(-5px)',
+                  boxShadow: theme.shadows[4],
+                },
+              }}
+            >
+              {item.icon}
+              <Typography variant='h6' component='h2' sx={{ mt: 2, mb: 2 }}>
+                {item.title}
+              </Typography>
               <Button
                 variant='contained'
                 color='primary'
-                onClick={handleOpenDietChart}
-                style={{ marginTop: 16 }}
+                onClick={() => navigate(item.path)}
+                sx={{ mt: 'auto' }}
               >
-                Assign Diet Chart
+                View {item.title}
               </Button>
             </Paper>
-          )}
-        </Grid>
+          </Grid>
+        ))}
       </Grid>
-      <Dialog
-        open={openDietChart}
-        onClose={handleCloseDietChart}
-        maxWidth='lg'
-        fullWidth
-      >
-        <DialogTitle>Assign Diet Chart for {selectedUser?.name}</DialogTitle>
-        <DialogContent>
-          <DietChart dietData={dietData} />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDietChart} color='primary'>
-            Close
-          </Button>
-          <Button
-            onClick={handleCloseDietChart}
-            color='primary'
-            variant='contained'
-          >
-            Save Diet Chart
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Container>
   )
 }
