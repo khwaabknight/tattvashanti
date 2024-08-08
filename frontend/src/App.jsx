@@ -6,10 +6,14 @@ import Home from './pages/Home'
 import CounsellorLogin from './pages/CounsellorLogin'
 import CounsellorRegister from './pages/CounsellorRegister'
 import Dashboard from './pages/Dashboard'
+import Cuisine from './pages/Cuisine'
+import Dishes from './pages/Dishes'
+import Users from './pages/Users'
 import ProtectedRoute from './pages/ProtectedRoute'
 
 function App() {
   const [count, setCount] = useState(0)
+
   return (
     <div>
       <Routes>
@@ -21,6 +25,30 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/counsellor/cuisine'
+          element={
+            <ProtectedRoute>
+              <Cuisine />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/counsellor/dishes'
+          element={
+            <ProtectedRoute>
+              <Dishes />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/counsellor/users'
+          element={
+            <ProtectedRoute>
+              <Users />
             </ProtectedRoute>
           }
         />
