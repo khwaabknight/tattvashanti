@@ -13,7 +13,7 @@ const userSchema = new Schema({
             trim: true,
         },
         age: {
-            type: Number,
+            type: String,
             required: true,
         },
         weight: {
@@ -26,11 +26,10 @@ const userSchema = new Schema({
         },
         goal: {
             type: String,
-            required: true,
         },
         gender: {
             type: String,
-            enum:["MALE","FEMALE"],
+            enum:["MALE","FEMALE","PREFER NOT TO SAY"],
             required: true,
         },
         mobile: {

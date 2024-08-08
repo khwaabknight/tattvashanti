@@ -1,5 +1,6 @@
 import { User } from "../models/user.model.js";
 import { google } from 'googleapis';
+import fs from 'fs';
 
 const createUser = async (req, res) => {
     const { name, email, age, weight, height, goal, gender, mobile, medicalCondition } = req.body;
@@ -98,41 +99,68 @@ const getUsersFromSheets = async (req, res) => {
         const spreadsheetId = '1SI9EUEG2Msfo_n1wxorDjh0WuuZk_aYa5uNlIYZit00';
 
         // The range of cells to retrieve
-        const range = 'Sheet1!A1:B';
+        let lastWrittenRow = fs.readFileSync('lastWrittenRow.txt', 'utf8');
+        const range = `Sheet1!A${lastWrittenRow}:AJ`;
 
-        // console.log(auth)
-        // console.log(sheets)
+        try {
+            const response = await sheets.spreadsheets.values.get({
+                spreadsheetId,
+                range,
+            });
+    
+            const rows = response.data.values;
+            console.log('rows', rows.length);
+            if (!rows.length) {
+                console.log('No data found.');
+            } else {
+                for (const row of rows) {
+                    const name = row[2];
+                    const email = row[1];
+                    const age = row[3];
+                    const weight = row[5];
+                    const height = row[27];
+                    const gender = row[4].toUpperCase();
+                    const mobile = row[6];
+                    const medicalCondition = row[13];
 
-        async function getSpreadsheetData() {
-            try {
-                const response = await sheets.spreadsheets.values.get({
-                    spreadsheetId,
-                    range,
-                });
-                
-        
-                const rows = response.data.values;
-                if (rows.length) {
-                    rows.forEach(row => {
-                        // Print columns A and E, which correspond to indices 0 and 4.
-                        console.log(`${row[0]}, ${row[4]}`);
-                    });
-                } else {
-                    console.log('No data found.');
-                }
-            } catch (err) {
-                console.error('The API returned an error:', err);
+                    if([name, email, age, weight, height, gender].includes("") || [name, email, age, weight, height,gender].includes(undefined)) {
+                        break;
+                    }
+                    try {
+                        await User.create({
+                            name,
+                            email,
+                            age,
+                            weight,
+                            height,
+                            gender,
+                            mobile,
+                            medicalCondition,
+                        });
+                        lastWrittenRow = parseInt(lastWrittenRow) + 1;
+                        fs.writeFileSync('lastWrittenRow.txt', `${lastWrittenRow}`);
+                    } catch (error) {
+                        console.log("Error while creating user", error);
+                        return res.status(400).json({
+                            message: "Error while creating user",
+                            success: false,
+                            error: error.message,
+                        });                        
+                    }
+                };
             }
+        } catch (err) {
+            console.error('The API returned an error:', err);
+            return res.status(400).json({
+                message: "Error while getting users from sheets",
+                success: false,
+                error: err.message,
+            });
         }
-        
-        getSpreadsheetData();
-
-
 
         return res.status(200).json({
             success: true,
             message: "Users fetched successfully",
-            auth,
         });
         
     } catch (error) {
