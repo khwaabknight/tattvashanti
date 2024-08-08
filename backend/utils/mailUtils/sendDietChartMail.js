@@ -4,7 +4,7 @@ import mailSender from "./mailSender.js";
 import { fileURLToPath } from 'url';
 
 
-async function sendDietChartMail(email, name, dietChart) {
+async function sendDietChartMail(email, name) {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = dirname(__filename);
     const title = "Diet Chart";

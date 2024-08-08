@@ -45,20 +45,6 @@ app.use('/api/v1/dish', dishRouter);
 app.use('/api/v1/baseDietChart', baseDietChartRouter);
 app.use('/api/v1/dietChart', dietChartRouter);
 
-app.get('/api/v1/sendPDF', async (req, res) => {
-  try {
-    console.log('Generating PDF and sending email...');
-    const data = { /* Your data */ }; // Replace with your data
-    const pdfres = await createPDF(data);
-    console.log('PDFres created successfully');
-    console.log(pdfres);
-    sendDietChartMail('aman.guptao666@gmail.com',"Aman"); // Replace with recipient email
-    return res.status(200).json({message:'PDF sent successfully to Aman'});
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send('Error generating or sending PDF');
-  }
-});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

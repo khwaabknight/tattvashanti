@@ -1,48 +1,43 @@
 import PDFDocument from 'pdfkit';
 import fs from 'fs';
 
-function createPDF(data, outputPath = 'utils/mailUtils/output.pdf') {
-    return new Promise((resolve, reject) => {
-        const doc = new PDFDocument();
+function createDietChartPDF(dietChart, outputPath = 'utils/mailUtils/output.pdf') {
+  const doc = new PDFDocument();
+  try {
     
-        // Pipe the PDF to a file stream for writing
-        doc.pipe(fs.createWriteStream(outputPath));
+    // Pipe the PDF to a file stream for writing
+    doc.pipe(fs.createWriteStream(outputPath));
 
-        console.log('Creating PDF...');
-    
-        // Set PDF document properties (optional)
-        // doc.info({
-        //   Title: 'Diet-Chart',
-        //   Author: 'TattvaShanti - Nutrition',
-        //   Subject: 'Diet Chart for the next week',
-        //   Keywords: 'Diet, Nutrition, Health',
-        // });
-    
-        // Add content to the PDF
-        doc.fontSize(12);
-        doc.text('This is a sample PDF document.', 50, 50);
-    
-        // Example of adding an image (replace with your image path)
-        // doc.image('path/to/your/image.jpg', 100, 100, { width: 100 });
-    
-        // Add more content as needed using PDFKit's methods
-        const data = [
-            ['Column1', 'Column2', 'Column3'],
-            ['Row1 Col1', 'Row1 Col2', 'Row1 Col3'],
-            ['Row2 Col1', 'Row2 Col2', 'Row2 Col3']
-        ];
-        createTable(doc, data, 50, 100, 300, 100);
+    // Add content to the PDF
+    doc.fontSize(12);
+    doc.text('This is a sample PDF document.', 50, 50);
 
-        console.log('PDF created successfully');
-    
-        // End the PDF document
-        doc.end();
-        resolve('PDF created successfully');
-    
-        doc.on('error', (err) => {
-          reject(err);
-        });
+    // Example of adding an image (replace with your image path)
+    // doc.image('path/to/your/image.jpg', 100, 100, { width: 100 });
+
+    const data = dietChart.items.map(item => {
+      if(item === null) return ['-', '-', '-'];
+      return [
+        item.dishes.map(dish => dish.name).join(', '),
+        item.servingSize + "grams",
+        item.calories + "kcal",
+      ];
     });
+
+    console.log('Creating PDF...');
+    console.log(data);
+
+    // Add more content as needed using PDFKit's methods
+    createTable(doc, data, 50, 100, 300, 50);
+
+    // End the PDF document
+    
+    
+  } catch (error) {
+    console.error('Error creating PDF:', error);
+  } finally {
+    doc.end();
+  }
 }
 
 function createTable(doc, data, x, y, width, height) {
@@ -69,4 +64,4 @@ function createTable(doc, data, x, y, width, height) {
     }
 }
 
-export default createPDF;
+export default createDietChartPDF;

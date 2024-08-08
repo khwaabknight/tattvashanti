@@ -22,7 +22,7 @@ const createBaseDietChart = async (req, res) => {
                 });
             }
             const newItem = new DietChartItem({
-                dish: item.dish,
+                dishes: item.dishes,
                 calories: item.calories,
                 servingSize: item.servingSize,
             });
