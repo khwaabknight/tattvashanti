@@ -10,6 +10,7 @@ import Cuisine from './pages/Cuisine'
 import Dishes from './pages/Dishes'
 import Users from './pages/Users'
 import ProtectedRoute from './pages/ProtectedRoute'
+import DietCharts from './pages/DietCharts'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -49,6 +50,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Users />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/counsellor/diet-charts'
+          element={
+            <ProtectedRoute>
+              <DietCharts />
             </ProtectedRoute>
           }
         />

@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom'
 import RestaurantIcon from '@mui/icons-material/Restaurant'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
 import PeopleIcon from '@mui/icons-material/People'
-
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 const Dashboard = () => {
   const navigate = useNavigate()
   const theme = useTheme()
@@ -32,6 +32,11 @@ const Dashboard = () => {
       title: 'Users',
       icon: <PeopleIcon fontSize='large' />,
       path: '/counsellor/users',
+    },
+    {
+      title: 'Diet Charts',
+      icon: <CalendarTodayIcon fontSize='large' />,
+      path: '/counsellor/diet-charts',
     },
   ]
 
