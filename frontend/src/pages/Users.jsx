@@ -71,11 +71,19 @@ const Users = () => {
     }
   }
 
-  const fetchDietChart = async (userId) => {
+  const fetchDietChart = async () => {
+    if (!selectedUser) {
+      console.error('Please select a user to fetch the diet chart')
+      return
+    }
+
     try {
-      const response = await api.get(`/api/v1/dietChart/${userId}`)
+      const response = await api.get(
+        `/api/v1/dietChart/user/${selectedUser._id}`
+      )
       console.log('API Response:', response)
       if (response.data && response.data.success) {
+        // Assuming the response contains a single diet chart in the `dietCharts` array
         const fetchedDietChart =
           response.data.dietCharts.length > 0
             ? response.data.dietCharts[0]
@@ -94,7 +102,7 @@ const Users = () => {
 
   const handleUserClick = (user) => {
     setSelectedUser(user)
-    fetchDietChart(user._id)
+    fetchDietChart()
   }
 
   const handleCuisineChange = (event) => {
@@ -135,7 +143,8 @@ const Users = () => {
       const response = await api.post('/api/v1/dietChart', dietChartData)
       if (response.data && response.data.success) {
         console.log('Diet chart assigned successfully:', response.data)
-        fetchDietChart(selectedUser._id)
+        // Re-fetch the diet chart after assigning it
+        await fetchDietChart()
       } else {
         console.error('Failed to assign diet chart:', response.data)
       }
@@ -149,7 +158,17 @@ const Users = () => {
     console.log('Toggle Diet Chart:', !showDietChart)
   }
 
-  const distributeDishesEvenly = (meals) => {
+  const distributeDishesEvenly = (items) => {
+    console.log('Diet chart items:', items)
+
+    // Filter out null values
+    const validItems = items.filter((item) => item !== null)
+
+    if (validItems.length === 0) {
+      return [] // Return an empty array if there are no valid items
+    }
+
+    // Days of the week for distribution
     const daysOfWeek = [
       'Monday',
       'Tuesday',
@@ -159,11 +178,19 @@ const Users = () => {
       'Saturday',
       'Sunday',
     ]
+
+    // Create a template for the diet chart
     const dietChartTemplate = daysOfWeek.map((day) => ({ day, meals: [] }))
 
-    meals.forEach((meal, index) => {
-      const dayIndex = index % daysOfWeek.length
-      dietChartTemplate[dayIndex].meals.push(meal)
+    validItems.forEach((item, index) => {
+      if (item) {
+        const dayIndex = index % daysOfWeek.length
+        const meal = {
+          type: 'Meal Type', // Replace with actual meal type if available
+          items: [item], // Assuming item is an ID, add it to the meals array
+        }
+        dietChartTemplate[dayIndex].meals.push(meal)
+      }
     })
 
     return dietChartTemplate
@@ -264,7 +291,7 @@ const Users = () => {
                 </Button>
               )}
 
-              {showDietChart && dietChart && dietChart.days && (
+              {showDietChart && dietChart && dietChart.items && (
                 <div>
                   <Typography variant='h6' sx={{ mt: 4, mb: 2 }}>
                     Current Diet Chart
@@ -278,7 +305,7 @@ const Users = () => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {distributeDishesEvenly(dietChart.meals).map(
+                        {distributeDishesEvenly(dietChart.items).map(
                           (day, index) => (
                             <TableRow key={index}>
                               <TableCell>{day.day}</TableCell>

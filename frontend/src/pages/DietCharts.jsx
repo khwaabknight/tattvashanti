@@ -21,7 +21,7 @@ import {
   TableCell,
   Box,
 } from '@mui/material'
-import DietChart from './DietChart'
+
 import api from '../utils/axiosConfig'
 import { useNavigate } from 'react-router-dom'
 
